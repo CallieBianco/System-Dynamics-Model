@@ -6,7 +6,10 @@
     Practice using a programming language to model system dynamics. 
     This modules analyzes drug dosage of aspirin with a repeated dose.
     
-    Terminology is defined in mod2.1_mod2.5_single_dose.py                            
+    Terms:
+    Minimum effective concentration (MEC) is the minimum concentration that is required for drug effect
+    Minimum toxic concentration (MTC) is the minimum concentration in which toxicity usually occurs
+    https://step1.medbullets.com/pharmacology/107009/therapeutic-index
 """
 
 #-----------------------------------------------------------------------
