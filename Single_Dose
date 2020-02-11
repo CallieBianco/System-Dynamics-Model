@@ -1,0 +1,72 @@
+#=======================================================================
+#                        General Documentation
+
+"""Module 2.5 Practice: Drug Dosage (Repeated Doses)
+    
+    Practice using a programming language to model system dynamics. 
+    This modules analyzes drug dosage of aspirin with a repeated dose.
+    
+    Terminology is defined in mod2.1_mod2.5_single_dose.py                            
+"""
+
+#-----------------------------------------------------------------------
+#                       Additional Documentation
+#
+# Modification History:
+# - 12 Apr, 2019  Original by Callie Bianco, UW Bothell.
+#
+# Notes:
+# - Written for Python 3.7.2.
+#
+# Callie Bianco
+#=======================================================================
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Convert x to i
+def x_to_i(x):
+    return x / delta_x + 1
+    
+# Convert i to x
+def i_to_x(i):
+    return (i - 1) * delta_x
+    
+# Constant ordinary variables
+mec = 10 # ug/mL
+mtc = 20 # ug/mL
+half_life = 22 # hours (h)
+volume = 1500 # mL
+dosage = 100 * 1000 # ug
+absorption_fraction = .12 # unitless
+interval = 24 # h
+
+# Other ordinary variables
+elimination_constant = (-math.log(.5) / half_life) # 1/h
+
+# Stock variable
+drug_in_system = np.zeros(5040)
+drug_in_system[0] = absorption_fraction * dosage
+
+# Time
+sim_hrs = 168
+delta_x = 2 / 60
+
+time_x = np.arange(0, sim_hrs, delta_x)
+
+for i in range(len(time_x)-1):
+    if i_to_x(i) % interval == 0:
+        ingested = absorption_fraction * dosage
+    else:
+        ingested = 0
+    eliminated = (elimination_constant * drug_in_system[i]) * delta_x
+    drug_in_system[i + 1] = drug_in_system[i] + ingested - eliminated
+concentration = drug_in_system / volume
+
+plt.plot(time_x, concentration, 'c')
+plt.hlines(mec, 0, sim_hrs, 'b') # plot line at MEC
+plt.hlines(mtc, 0, sim_hrs, 'r') # plot line at MTC
+plt.xlabel("hours")
+plt.ylabel("plasma concentration (ug/mL)")
+plt.title("Dilantin concentration over time")
+plt.show()
